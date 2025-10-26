@@ -42,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Get user
-        User user = userDao.getUserByUsername(username);
+        User user = userDao.getByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found.");
         }
@@ -51,7 +51,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<String> roles = userDao.getRoles(username);
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         }
 
         // Create JwtUser

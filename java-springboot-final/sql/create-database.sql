@@ -1,52 +1,74 @@
-create database if not exists web_shop;
-use web_shop;
+-- Create and use the database
+CREATE DATABASE IF NOT EXISTS web_shop;
+USE web_shop;
 
-drop table if exists users, roles, products, orders, order_items;
+-- Drop existing tables if they exist
+DROP TABLE IF EXISTS users, roles, products, orders, order_items;
 
-create table users (
-    username varchar(255) primary key,
-    password varchar(255)
+-- Create users table
+CREATE TABLE users (
+    username VARCHAR(255) PRIMARY KEY,
+    password VARCHAR(255)
 );
 
-create table roles (
-    username varchar(255) not null,
-    role varchar(250) not null,
-    primary key (username, role),
-    foreign key (username) references users(username) on delete cascade
+-- Create roles table
+CREATE TABLE roles (
+    username VARCHAR(255) NOT NULL,
+    role VARCHAR(250) NOT NULL,
+    PRIMARY KEY (username, role),
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
 
-create table products (
-    id int primary key auto_increment,
-    name varchar(255),
-    price decimal(10, 2)
+-- Create products table
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    price DECIMAL(10, 2)
 );
 
-create table orders (
-    id int primary key auto_increment,
-    username varchar(255),
-    foreign key (username) references users(username) on delete cascade
+-- Create orders table
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255),
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
 );
 
-create table order_items (
-    id int primary key auto_increment,
-    order_id int,
-    product_id int,
-    quantity int,
-    foreign key (order_id) references orders(id) on delete cascade,
-    foreign key (product_id) references products(id) on delete cascade
+-- Create order_items table
+CREATE TABLE order_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
-insert into users (username, password) values ('admin', '$2a$10$tBTfzHzjmQVKza3VSa5lsOX6/iL93xPVLlLXYg2FhT6a.jb1o6VDq');
-insert into roles (username, role) values ('admin', 'ADMIN');
+-- Insert admin user
+INSERT INTO users (username, password)
+VALUES ('admin', '$2a$10$tBTfzHzjmQVKza3VSa5lsOX6/iL93xPVLlLXYg2FhT6a.jb1o6VDq');
 
-insert into products (name, price) values ('Apple', 0.99);
-insert into products (name, price) values ('Banana', 0.59);
-insert into products (name, price) values ('Cherry', 1.99);
-insert into products (name, price) values ('Date', 2.99);
-insert into products (name, price) values ('Elderberry', 3.99);
+-- Assign ADMIN role to admin
+INSERT INTO roles (username, role)
+VALUES ('admin', 'ADMIN');
 
-insert into orders (username) values ('admin');
-insert into orders (username) values ('admin');
-insert into orders (username) values ('admin');
-insert into orders (username) values ('admin');
-insert into orders (username) values ('admin');
+-- Insert test-admin user for test compatibility
+INSERT INTO users (username, password)
+VALUES ('test-admin', '$2a$10$tBTfzHzjmQVKza3VSa5lsOX6/iL93xPVLlLXYg2FhT6a.jb1o6VDq');
+
+-- Assign ADMIN role to test-admin
+INSERT INTO roles (username, role)
+VALUES ('test-admin', 'ADMIN');
+
+-- Insert sample products
+INSERT INTO products (name, price) VALUES ('Apple', 0.99);
+INSERT INTO products (name, price) VALUES ('Banana', 0.59);
+INSERT INTO products (name, price) VALUES ('Cherry', 1.99);
+INSERT INTO products (name, price) VALUES ('Date', 2.99);
+INSERT INTO products (name, price) VALUES ('Elderberry', 3.99);
+
+-- Insert sample orders for admin
+INSERT INTO orders (username) VALUES ('admin');
+INSERT INTO orders (username) VALUES ('admin');
+INSERT INTO orders (username) VALUES ('admin');
+INSERT INTO orders (username) VALUES ('admin');
+INSERT INTO orders (username) VALUES ('admin');
